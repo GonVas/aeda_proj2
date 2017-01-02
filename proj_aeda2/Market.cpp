@@ -497,9 +497,10 @@ Client * Market::change_dead_adress(int nif, string new_adress)
 	unordered_set<Client *, hfunc, eqfunc>::iterator it;
 	for (it = this->dead_clients.begin(); it != this->dead_clients.end();)
 	{
-		if ((*it)->get_nif == -nif)
+		if ((*it)->get_nif() == nif)
 		{
-			Client * new_one = new Client((*it)->get_name(), (*it)->get_nif(), (*it)->get_money());
+			Client * new_one = new Client((*it));
+			new_one->set_adress(new_adress);
 			this->dead_clients.erase(it);
 			this->dead_clients.insert(new_one);
 			return new_one;
@@ -651,7 +652,7 @@ void test(ostream & out)
 	if (test < test1)
 		cout << "True and "; test.out(cout) << endl;
 
-	out << "Order and Transaction Creating: ";
+	out << "Order and Transaction News Inactive clients Creating: ";
 	
 	Order sell_ord(&cli1, 15, "wd", 15, 1, "gato");
 	first.add_order(&sell_ord);
@@ -706,11 +707,6 @@ void test(ostream & out)
 		|| first.transactions.at(2)->get_share()->get_amount() != 30
 		|| first.transactions.at(2)->get_share()->get_indus() != "cao" 
 		|| first.clients.at(1)->get_money() != client_money)
-		working = false;
-
-
-	//Creating testing
-	if (first.create_sell_order(first.clients.at(0), "pato", 15, 100) != false || first.create_sell_order(first.clients.at(0), "pato", 12, 100) != true || first.create_sell_order(first.clients.at(0), "pato", 3, 100) != false)
 		working = false;
 
 	//Order sell_ord2(&cli1, 5, "wd", 5, 1, "cao");

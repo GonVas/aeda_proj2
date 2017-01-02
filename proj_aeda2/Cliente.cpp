@@ -13,6 +13,18 @@ Client::Client()
 	this->name = "Default";
 }
 
+Client::Client(const Client * par)
+{
+	this->active = par->active;
+	this->adress = par->adress;
+	this->last_trans = par->last_trans;
+	this->money = par->money;
+	this->shares = par->shares;
+	this->phone = par->phone;
+	this->name = par->name;
+	this->nif = par->nif;
+}
+
 int Client::get_nif() const
 {
 	return this->nif;

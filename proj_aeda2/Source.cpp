@@ -4,12 +4,12 @@
 
 using namespace std;
 
-
-
 void main()
 {
 
 	test(cout);
+	Market m1("File");
+	m1.menu(cout);
 
 	return;
 }

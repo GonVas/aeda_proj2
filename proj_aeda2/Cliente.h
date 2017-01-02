@@ -14,6 +14,7 @@ class Client
 public:
 	Client(string name, int nif, float money);
 	Client();
+	Client(const Client * par);
 	int get_nif() const;
 	string get_name() const;
 	void add_share(Share* newone);
