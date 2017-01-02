@@ -3,47 +3,24 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include <ostream>
+#include "Date.h"
+#include "Industry.h"
+#include "News.h"
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "Manager.h"
+#include "Cliente.h"
+#include "Share.h"
+#include <queue>
+
 
 using namespace std;
 
-class Share;
-class Client;
 class Order;
 class Transaction;
 class Market;
-
-class Share
-{
-public:
-	Share(string indus, int amount, Client * owner, float money);
-	Client * get_owner();
-	int get_amount();
-	void set_amount(int amount);
-	string get_indus();
-	float get_money();
-private:
-	int amount;
-	float money;
-	string indus;
-	Client * owner;
-};
-
-class Client
-{
-public:
-	Client(string name, int nif);
-	Client();
-	int get_nif();
-	string get_name() const;
-	void add_share(Share* newone);
-	int update_share(Share * tobe_updated, int amount);
-	vector<Share* > get_shares();
-	bool remove_share(Share * what);
-private:
-	int nif;
-	string name;
-	vector<Share*> shares;
-};
 
 class Transaction
 {
@@ -84,6 +61,7 @@ private:
 class Market
 {
 public:
+	static int current_manager;
 	Market(string filename);
 	bool add_client(string name, int nif);
 	bool add_client(string name, int nif, vector<Share*> shares);
@@ -98,6 +76,21 @@ public:
 
 	inline Order * look_order_match(Order * input_order);
 	inline int sub_orders(Order* lhs, Order * rhs);
+	inline bool remove_share_andgive(Client * from, Client * to, int amount, float price, string indus);
+	bool create_sell_order(Client * cli, string indus, int amount, float price);
+
+	News * generate_news(string newspaper, Date date, Industry * indus, int desired_rate = -1);
+	void add_news(News * newss);
+	vector<News *> get_news_dates(Industry * indus, Date d1, Date d2);
+	vector<News *> get_news_indus(string indus);
+
+	void generate_managers(int how_many);
+	void add_manager(string name);
+	Manager * top_manager();
+	void menu(ostream & out);
+
+
+	friend void test(ostream & out);
 
 private:
 	vector<Share*> shares;
@@ -106,6 +99,11 @@ private:
 	set<Order*> buy_orders;
 	vector<Transaction *> transactions;
 	string filename;
+
+	int day;
+
+	set<News *> news;
+	priority_queue<Manager *> managers;
 
 	bool share_updater(Client * cli, string indus, int amount);
 };

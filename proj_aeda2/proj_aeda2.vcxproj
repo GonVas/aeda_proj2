@@ -146,12 +146,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cliente.cpp" />
+    <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Industry.cpp" />
+    <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Market.cpp" />
+    <ClCompile Include="News.cpp" />
+    <ClCompile Include="Share.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Client.h" />
+    <ClInclude Include="Cliente.h" />
+    <ClInclude Include="Date.h" />
+    <ClInclude Include="Industry.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Market.h" />
+    <ClInclude Include="News.h" />
+    <ClInclude Include="Share.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
