@@ -25,6 +25,14 @@ public:
 			else
 				return (this->day < rhs.get_day());
 	}
+	bool operator==(const Date & rhs)
+	{
+		return (this->day == rhs.get_day() && this->month == rhs.get_month() && this->year == rhs.get_year());
+	}
+	bool operator!=(const Date & rhs)
+	{
+		return !(this->day == rhs.get_day() && this->month == rhs.get_month() && this->year == rhs.get_year());
+	}
 
 	ostream& out(ostream& os)
 	{

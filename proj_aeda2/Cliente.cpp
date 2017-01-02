@@ -13,7 +13,7 @@ Client::Client()
 	this->name = "Default";
 }
 
-int Client::get_nif()
+int Client::get_nif() const
 {
 	return this->nif;
 }
@@ -89,6 +89,36 @@ void Client::set_last_trans(Date date)
 Date Client::get_last_trans()
 {
 	return this->last_trans;
+}
+
+int Client::get_active() const
+{
+	return this->active;
+}
+
+void Client::set_active(bool yes)
+{
+	this->active = yes;
+}
+
+string Client::get_adress() const
+{
+	return this->adress;
+}
+
+void Client::set_adress(string new_adress)
+{
+	this->adress = new_adress;
+}
+
+string Client::get_phone() const
+{
+	return this->phone;
+}
+
+void Client::set_phone(string new_phone)
+{
+	this->phone = new_phone;
 }
 
 vector<Share*>* Client::get_p_shares()

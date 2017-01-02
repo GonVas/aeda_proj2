@@ -392,7 +392,7 @@ void Market::generate_managers(int how_many)
 
 void Market::add_manager(string name)
 {
-	priority_queue<Manager *> newone = this->managers;
+	priority_queue<Manager *, vector<Manager *>, compareManagers> newone = this->managers;
 	vector<Manager *> all_man;
 	while(!newone.empty())
 	{
@@ -428,12 +428,12 @@ void Market::menu(ostream & out)
 	out << string(100, '\n');
 	string state = "main";
 
-	while(state != "exit")
+	while (state != "exit")
 	{
 		if (state == "main")
 		{
 			out << "Day: " << this->day << endl << endl;
-			out << "Menu options: " << endl;	
+			out << "Menu options: " << endl;
 			out << "1 - Client option, transactions and 1º project related." << endl;
 			out << "2 - News options" << endl;
 			out << "3 - Manager options" << endl;
@@ -451,6 +451,64 @@ void Market::menu(ostream & out)
 		}
 
 	}
+}
+
+void Market::manage_dead_cli()
+{
+	unordered_set<Client *, hfunc, eqfunc>::iterator it;
+	for (it = this->dead_clients.begin(); it != this->dead_clients.end();)
+	{
+		if ((*it)->get_active() == 1)
+			this->dead_clients.erase(it);
+	}
+
+	for (int i = 0; i < this->clients.size(); i++)
+	{
+		if (this->clients.at(i)->get_active() == 0)
+			this->dead_clients.insert(this->clients.at(i));
+	}
+	
+}
+
+Client * Market::find_cli(string name)
+{
+	Client * res = nullptr;
+	for(int i = 0; i < this->clients.size(); i++)
+	{ 
+		if (this->clients.at(i)->get_name() == name)
+			res = this->clients.at(i);
+	}
+	return res;
+}
+
+Client * Market::find_cli(int nif)
+{
+	Client * res = nullptr;
+	for (int i = 0; i < this->clients.size(); i++)
+	{
+		if (this->clients.at(i)->get_nif() == nif)
+			res = this->clients.at(i);
+	}
+	return res;
+}
+
+Client * Market::change_dead_adress(int nif, string new_adress)
+{
+	unordered_set<Client *, hfunc, eqfunc>::iterator it;
+	for (it = this->dead_clients.begin(); it != this->dead_clients.end();)
+	{
+		if ((*it)->get_nif == -nif)
+		{
+			Client * new_one = new Client((*it)->get_name(), (*it)->get_nif(), (*it)->get_money());
+			this->dead_clients.erase(it);
+			this->dead_clients.insert(new_one);
+			return new_one;
+		}
+			
+	}
+	return nullptr;
+
+}
 
 bool Market::share_updater(Client * cli, string indus, int amount)
 {
@@ -582,7 +640,8 @@ void test(ostream & out)
 	first.add_manager("lol3");
 	first.add_manager("lol4");
 	first.add_manager("lol5");
-
+	if (top->get_num_cli() != 1)
+		working = false;
 
 //==================================ORDERS================================================================
 

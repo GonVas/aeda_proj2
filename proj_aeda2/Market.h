@@ -14,6 +14,7 @@
 #include "Cliente.h"
 #include "Share.h"
 #include <queue>
+#include <unordered_set>
 
 
 using namespace std;
@@ -58,6 +59,35 @@ private:
 	string indus;
 };
 
+struct eqfunc {
+	int operator() (const Client *s1, const Client *s2) const {
+		return s1->get_nif() == s2->get_nif();
+	}
+};struct hfunc {
+	int operator() (const Client *s1) const {
+		return s1->get_nif();
+	}
+};struct compareNews {
+
+	bool operator()(const News * r1 , const News * r2) {
+		if (r1->get_indus()->get_name() != r2->get_indus()->get_name())
+			return r1->get_indus()->get_name() < r2->get_indus()->get_name();
+		else
+			if (r1->get_date() != r2->get_date())
+				return r1->get_date() < r2->get_date();
+			else
+				if (r1->get_indus()->get_name() != r2->get_indus()->get_name())
+					return r1->get_indus()->get_name() < r2->get_indus()->get_name();
+				else
+					return (r1->get_newspaper() < r2->get_newspaper());
+	}
+};struct compareManagers {
+
+	bool operator()(const Manager * r1, const Manager * r2) {
+		return (r2->get_num_cli()< r1->get_num_cli());
+	}
+};
+
 class Market
 {
 public:
@@ -89,6 +119,11 @@ public:
 	Manager * top_manager();
 	void menu(ostream & out);
 
+	void manage_dead_cli();
+	Client * find_cli(string name);
+	Client * find_cli(int nif);
+	Client * change_dead_adress(int nif, string new_adress);
+	
 
 	friend void test(ostream & out);
 
@@ -102,8 +137,9 @@ private:
 
 	int day;
 
-	set<News *> news;
-	priority_queue<Manager *> managers;
+	set<News *, compareNews> news;
+	priority_queue<Manager *, vector<Manager *>, compareManagers> managers;
+	unordered_set<Client *, hfunc, eqfunc> dead_clients;
 
 	bool share_updater(Client * cli, string indus, int amount);
 };
